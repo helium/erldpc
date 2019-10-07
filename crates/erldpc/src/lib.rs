@@ -52,7 +52,7 @@ fn decode_tc128<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> 
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode, &mut rxdata, &mut working, iterations as usize);
-    Ok((atoms::ok(), &rxdata).encode(env))
+    Ok((atoms::ok(), rxdata).encode(env))
 }
 
 // TC256 scheme encode/decode
@@ -71,7 +71,7 @@ fn decode_tc256<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> 
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode, &mut rxdata, &mut working, iterations as usize);
-    Ok((atoms::ok(), &rxdata).encode(env))
+    Ok((atoms::ok(), rxdata).encode(env))
 }
 
 // TC512 scheme encode/decode
@@ -91,7 +91,7 @@ fn decode_tc512<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> 
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode, &mut rxdata, &mut working, iterations as usize);
-    Ok((atoms::ok(), &rxdata).encode(env))
+    Ok((atoms::ok(), rxdata).encode(env))
 }
 
 // TM1280 scheme encode/decode
@@ -110,7 +110,7 @@ fn decode_tm1280<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error>
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode, &mut rxdata, &mut working, iterations as usize);
-    Ok((atoms::ok(), &rxdata).encode(env))
+    Ok((atoms::ok(), rxdata).encode(env))
 }
 
 // TM1536 scheme encode/decode
@@ -129,7 +129,7 @@ fn decode_tm1536<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error>
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode, &mut rxdata, &mut working, iterations as usize);
-    Ok((atoms::ok(), &rxdata).encode(env))
+    Ok((atoms::ok(), rxdata).encode(env))
 }
 
 // TM2048 scheme encode/decode
@@ -148,7 +148,7 @@ fn decode_tm2048<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error>
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode, &mut rxdata, &mut working, iterations as usize);
-    Ok((atoms::ok(), &rxdata).encode(env))
+    Ok((atoms::ok(), rxdata).encode(env))
 }
 
 
@@ -168,7 +168,7 @@ fn decode_tm5120<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error>
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode, &mut rxdata, &mut working, iterations as usize);
-    Ok((atoms::ok(), &rxdata).encode(env))
+    Ok((atoms::ok(), rxdata).encode(env))
 }
 
 
@@ -188,7 +188,7 @@ fn decode_tm6144<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error>
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode, &mut rxdata, &mut working, iterations as usize);
-    Ok((atoms::ok(), &rxdata).encode(env))
+    Ok((atoms::ok(), rxdata).encode(env))
 }
 
 // TM8192 scheme encode/decode
@@ -207,7 +207,7 @@ fn decode_tm8192<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error>
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode, &mut rxdata, &mut working, iterations as usize);
-    Ok((atoms::ok(), &rxdata).encode(env))
+    Ok((atoms::ok(), rxdata).encode(env))
 }
 
 #[cfg(test)]
