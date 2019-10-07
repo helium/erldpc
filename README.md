@@ -1,9 +1,14 @@
 erldpc
 =====
 
-An OTP library
+Erlang bindings to rust labrador-ldpc
 
 Build
 -----
 
-    $ rebar3 compile
+    $ make
+
+Test
+-----
+
+    $ make test
