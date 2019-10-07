@@ -1,13 +1,13 @@
 -module(erldpc).
 
 %% API
--export([add/2]).
+-export([encode/1]).
 
 %% Native lib support
 -export([load/0]).
 -on_load(load/0).
 
-add(_A, _B) ->
+encode(_Data) ->
     not_loaded(?LINE).
 
 load() ->
