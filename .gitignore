@@ -17,3 +17,7 @@ _build
 *.iml
 rebar3.crashdump
 *~
+.eqc
+current_counterexample.eqc
+.eqc-info
+
