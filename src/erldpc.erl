@@ -33,63 +33,63 @@ encode_tc128(_Data) ->
 decode_tc128(_Data) ->
     decode_tc128(_Data, ?ITERATIONS).
 decode_tc128(_Data, _Iterations) ->
-    decode_tc128(_Data).
+    not_loaded(?LINE).
 
 encode_tc256(_Data) ->
     not_loaded(?LINE).
 decode_tc256(_Data) ->
     decode_tc256(_Data, ?ITERATIONS).
 decode_tc256(_Data, _Iterations) ->
-    decode_tc256(_Data).
+    not_loaded(?LINE).
 
 encode_tc512(_Data) ->
     not_loaded(?LINE).
 decode_tc512(_Data) ->
     decode_tc512(_Data, ?ITERATIONS).
 decode_tc512(_Data, _Iterations) ->
-    decode_tc512(_Data).
+    not_loaded(?LINE).
 
 encode_tm1280(_Data) ->
     not_loaded(?LINE).
 decode_tm1280(_Data) ->
     decode_tm1280(_Data, ?ITERATIONS).
 decode_tm1280(_Data, _Iterations) ->
-    decode_tm1280(_Data).
+    not_loaded(?LINE).
 
 encode_tm1536(_Data) ->
     not_loaded(?LINE).
 decode_tm1536(_Data) ->
     decode_tm1536(_Data, ?ITERATIONS).
 decode_tm1536(_Data, _Iterations) ->
-    decode_tm1536(_Data).
+    not_loaded(?LINE).
 
 encode_tm2048(_Data) ->
     not_loaded(?LINE).
 decode_tm2048(_Data) ->
     decode_tm2048(_Data, ?ITERATIONS).
 decode_tm2048(_Data, _Iterations) ->
-    decode_tm2048(_Data).
+    not_loaded(?LINE).
 
 encode_tm5120(_Data) ->
     not_loaded(?LINE).
 decode_tm5120(_Data) ->
     decode_tm5120(_Data, ?ITERATIONS).
 decode_tm5120(_Data, _Iterations) ->
-    decode_tm5120(_Data).
+    not_loaded(?LINE).
 
 encode_tm6144(_Data) ->
     not_loaded(?LINE).
 decode_tm6144(_Data) ->
     decode_tm6144(_Data, ?ITERATIONS).
 decode_tm6144(_Data, _Iterations) ->
-    decode_tm6144(_Data).
+    not_loaded(?LINE).
 
 encode_tm8192(_Data) ->
     not_loaded(?LINE).
 decode_tm8192(_Data) ->
     decode_tm8192(_Data, ?ITERATIONS).
 decode_tm8192(_Data, _Iterations) ->
-    decode_tm8192(_Data).
+    not_loaded(?LINE).
 
 load() ->
     erlang:load_nif(filename:join(priv(), "liberldpc"), none).
