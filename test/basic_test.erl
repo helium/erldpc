@@ -3,38 +3,97 @@
 -include_lib("eunit/include/eunit.hrl").
 
 encode_decode_tc128_test() ->
-    Data = lists:seq(0, 7),
+    NumBytes = 8,
+    Data = lists:seq(0, NumBytes - 1),
     {ok, Encoded} = erldpc:encode_tc128(Data),
-    ?assertEqual(16, length(Encoded)).
+
+    [_First, _Second, _Third | Rest] = Encoded,
+    CorruptedEncode = [10, 20, 30 | Rest],
+
+    {ok, Decoded} = erldpc:decode_tc128(CorruptedEncode),
+    ?assertEqual(lists:sublist(Decoded, NumBytes), Data).
+
 encode_decode_tc256_test() ->
-    Data = lists:seq(0, 15),
+    NumBytes = 16,
+    Data = lists:seq(0, NumBytes - 1),
     {ok, Encoded} = erldpc:encode_tc256(Data),
-    ?assertEqual(32, length(Encoded)).
+    [_First, _Second, _Third | Rest] = Encoded,
+    CorruptedEncode = [10, 20, 30 | Rest],
+
+    {ok, Decoded} = erldpc:decode_tc256(CorruptedEncode),
+    ?assertEqual(lists:sublist(Decoded, NumBytes), Data).
+
 encode_decode_tc512_test() ->
+    NumBytes = 32,
     Data = lists:seq(0, 31),
+    Data = lists:seq(0, NumBytes - 1),
     {ok, Encoded} = erldpc:encode_tc512(Data),
-    ?assertEqual(64, length(Encoded)).
+    [_First, _Second, _Third | Rest] = Encoded,
+    CorruptedEncode = [10, 20, 30 | Rest],
+
+    {ok, Decoded} = erldpc:decode_tc512(CorruptedEncode),
+    ?assertEqual(lists:sublist(Decoded, NumBytes), Data).
+
 encode_decode_tm1280_test() ->
-    Data = lists:seq(0, 127),
+    NumBytes = 128,
+    Data = lists:seq(0, NumBytes - 1),
     {ok, Encoded} = erldpc:encode_tm1280(Data),
-    ?assertEqual(160, length(Encoded)).
+    [_First, _Second, _Third | Rest] = Encoded,
+    CorruptedEncode = [10, 20, 30 | Rest],
+
+    {ok, Decoded} = erldpc:decode_tm1280(CorruptedEncode),
+    ?assertEqual(lists:sublist(Decoded, NumBytes), Data).
+
 encode_decode_tm1536_test() ->
-    Data = lists:seq(0, 127),
+    NumBytes = 128,
+    Data = lists:seq(0, NumBytes - 1),
     {ok, Encoded} = erldpc:encode_tm1536(Data),
-    ?assertEqual(192, length(Encoded)).
+    [_First, _Second, _Third | Rest] = Encoded,
+    CorruptedEncode = [10, 20, 30 | Rest],
+
+    {ok, Decoded} = erldpc:decode_tm1536(CorruptedEncode),
+    ?assertEqual(lists:sublist(Decoded, NumBytes), Data).
+
 encode_decode_tm2048_test() ->
-    Data = lists:seq(0, 127),
+    NumBytes = 128,
+    Data = lists:seq(0, NumBytes - 1),
     {ok, Encoded} = erldpc:encode_tm2048(Data),
-    ?assertEqual(256, length(Encoded)).
+    [_First, _Second, _Third | Rest] = Encoded,
+    CorruptedEncode = [10, 20, 30 | Rest],
+
+    {ok, Decoded} = erldpc:decode_tm2048(CorruptedEncode),
+    ?assertEqual(lists:sublist(Decoded, NumBytes), Data).
+
 encode_decode_tm5120_test() ->
-    Data = lists:seq(0, 511),
+    NumBytes = 512,
+    Data = lists:seq(0, NumBytes - 1),
     {ok, Encoded} = erldpc:encode_tm5120(Data),
-    ?assertEqual(640, length(Encoded)).
+    [_First, _Second, _Third | Rest] = Encoded,
+    CorruptedEncode = [10, 20, 30 | Rest],
+
+    {ok, Decoded} = erldpc:decode_tm5120(CorruptedEncode),
+    io:format("Data: ~p~n", [Data]),
+    io:format("Encoded: ~p~n", [Encoded]),
+    io:format("CorruptedEncode: ~p~n", [CorruptedEncode]),
+    io:format("Decoded: ~p~n", [Decoded]),
+    ?assertEqual(lists:sublist(Decoded, NumBytes), Data).
+
 encode_decode_tm6144_test() ->
-    Data = lists:seq(0, 511),
+    NumBytes = 512,
+    Data = lists:seq(0, NumBytes - 1),
     {ok, Encoded} = erldpc:encode_tm6144(Data),
-    ?assertEqual(768, length(Encoded)).
+    [_First, _Second, _Third | Rest] = Encoded,
+    CorruptedEncode = [10, 20, 30 | Rest],
+
+    {ok, Decoded} = erldpc:decode_tm6144(CorruptedEncode),
+    ?assertEqual(lists:sublist(Decoded, NumBytes), Data).
+
 encode_decode_tm8192_test() ->
-    Data = lists:seq(0, 511),
+    NumBytes = 512,
+    Data = lists:seq(0, NumBytes - 1),
     {ok, Encoded} = erldpc:encode_tm8192(Data),
-    ?assertEqual(1024, length(Encoded)).
+    [_First, _Second, _Third | Rest] = Encoded,
+    CorruptedEncode = [10, 20, 30 | Rest],
+
+    {ok, Decoded} = erldpc:decode_tm8192(CorruptedEncode),
+    ?assertEqual(lists:sublist(Decoded, NumBytes), Data).
