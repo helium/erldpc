@@ -5,21 +5,37 @@
 -export([prop_check_tc128/0]).
 
 prop_check_tc128() ->
-    ?FORALL({Data, Corruption}, {gen_bytes8(), gen_corruption()},
+    ?FORALL({Data, Corruption0, Corruption1}, {gen_bytes8(), gen_corruption(), gen_corruption()},
             begin
                 Size = size(Data), %% 8 bytes for tc128
                 {ok, Encoded} = erldpc:encode_tc128(Data),
 
-                <<_:1/binary, Rest/binary>> = Encoded,
+                CorruptionA = abs(Corruption0) band 16#FFFFFFFFFFFFFFFF,
+                CorruptionB = abs(Corruption1) band 16#FFFFFFFFFFFFFFFF,
 
-                Corrupted = <<Corruption/binary, Rest/binary>>,
+                CorruptionVector = (CorruptionA bsl 128) + CorruptionB,
+
+                NumErrors = popcount(CorruptionVector),
+
+                <<EncodedAsInteger:128/integer-unsigned-little>> = Encoded,
+
+                Corrupted = <<(EncodedAsInteger bxor CorruptionVector):128/integer-unsigned-little>>,
 
                 {ok, <<Original:Size/binary, _/binary>>} = erldpc:decode_tc128(Corrupted),
 
-                Check = size(Encoded) == 2*Size andalso Original == Data,
+                Check = case NumErrors of
+                            N when N > 62 ->
+                                Original /= Data;
+                            N when N < 8->
+                                Original == Data;
+                            _ ->
+                                %% yolo
+                                true
+                        end,
 
                 ?WHENFAIL(begin
                               io:format("Data: ~p~n", [Data]),
+                              io:format("NumErrors: ~p~n", [NumErrors]),
                               io:format("Encoded: ~p~n", [Encoded]),
                               io:format("Corrupted: ~p~n", [Corrupted]),
                               io:format("Original: ~p~n", [Original])
@@ -29,7 +45,15 @@ prop_check_tc128() ->
             end).
 
 gen_bytes8() ->
-    binary(8).
+    ?SUCHTHAT(B, binary(8), B /= <<0, 0, 0, 0, 0, 0, 0, 0>>).
 
 gen_corruption() ->
-    binary(1).
+    ?SUCHTHAT(I, largeint(), I /= 0).
+
+popcount(N) ->
+    popcount(N,0).
+
+popcount(0,Acc) ->
+    Acc;
+popcount(N,Acc) ->
+    popcount(N div 2, Acc + N rem 2).
