@@ -10,3 +10,6 @@ clean:
 
 test:
 	$(REBAR) as test do eunit
+
+typecheck:
+	$(REBAR) dialyzer

@@ -5,29 +5,24 @@
 -export([prop_check_tc128/0]).
 
 prop_check_tc128() ->
-    ?FORALL(Bin, gen_bytes8(),
+    ?FORALL({Data, Corruption}, {gen_bytes8(), gen_corruption()},
             begin
-                Data = binary_to_list(Bin),
-                DataLength = length(Data),
+                Size = size(Data), %% 8 bytes for tc128
                 {ok, Encoded} = erldpc:encode_tc128(Data),
-                EncodedLength = length(Encoded),
 
-                [_First | Rest] = Encoded,
-                CorruptedEncode = [10 | Rest],
+                <<_:1/binary, Rest/binary>> = Encoded,
 
-                {ok, Decoded} = erldpc:decode_tc128(CorruptedEncode),
-                DecodedLength = length(Decoded),
+                Corrupted = <<Corruption/binary, Rest/binary>>,
 
-                Check = (EncodedLength == 2*DataLength andalso
-                         DecodedLength == 2*DataLength andalso
-                         lists:sublist(Decoded, DataLength) == Data),
+                {ok, <<Original:Size/binary, _/binary>>} = erldpc:decode_tc128(Corrupted),
 
-               ?WHENFAIL(begin
-                              io:format("Bin: ~p~n", [Bin]),
+                Check = size(Encoded) == 2*Size andalso Original == Data,
+
+                ?WHENFAIL(begin
                               io:format("Data: ~p~n", [Data]),
                               io:format("Encoded: ~p~n", [Encoded]),
-                              io:format("CorruptedEncode: ~p~n", [CorruptedEncode]),
-                              io:format("Decoded: ~p~n", [Decoded])
+                              io:format("Corrupted: ~p~n", [Corrupted]),
+                              io:format("Original: ~p~n", [Original])
                           end,
                           conjunction([{verify_tc128, Check}]))
 
@@ -35,3 +30,6 @@ prop_check_tc128() ->
 
 gen_bytes8() ->
     binary(8).
+
+gen_corruption() ->
+    binary(1).

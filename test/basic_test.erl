@@ -4,64 +4,81 @@
 
 encode_decode_tc128_test() ->
     NumBytes = 8,
-    Data = lists:seq(0, NumBytes - 1),
+    Data = crypto:strong_rand_bytes(NumBytes),
     {ok, Encoded} = erldpc:encode_tc128(Data),
 
-    [_First, _Second, _Third | Rest] = Encoded,
-    CorruptedEncode = [10, 20, 30 | Rest],
+    <<_:1/binary, Rest/binary>> = Encoded,
 
-    {ok, Decoded} = erldpc:decode_tc128(CorruptedEncode),
-    ?assertEqual(lists:sublist(Decoded, NumBytes), Data).
+    Corrupted = <<"x", Rest/binary>>,
+
+    {ok, <<Original:NumBytes/binary, _/binary>>} = erldpc:decode_tc128(Corrupted),
+
+    ?assertEqual(Original, Data).
 
 encode_decode_tc256_test() ->
     NumBytes = 16,
-    Data = lists:seq(0, NumBytes - 1),
+    Data = crypto:strong_rand_bytes(NumBytes),
     {ok, Encoded} = erldpc:encode_tc256(Data),
-    [_First, _Second, _Third | Rest] = Encoded,
-    CorruptedEncode = [10, 20, 30 | Rest],
 
-    {ok, Decoded} = erldpc:decode_tc256(CorruptedEncode),
-    ?assertEqual(lists:sublist(Decoded, NumBytes), Data).
+    <<_:1/binary, Rest/binary>> = Encoded,
+
+    Corrupted = <<"x", Rest/binary>>,
+
+    {ok, <<Original:NumBytes/binary, _/binary>>} = erldpc:decode_tc256(Corrupted),
+
+    ?assertEqual(Original, Data).
 
 encode_decode_tc512_test() ->
     NumBytes = 32,
-    Data = lists:seq(0, NumBytes - 1),
+    Data = crypto:strong_rand_bytes(NumBytes),
     {ok, Encoded} = erldpc:encode_tc512(Data),
-    [_First, _Second, _Third | Rest] = Encoded,
-    CorruptedEncode = [10, 20, 30 | Rest],
 
-    {ok, Decoded} = erldpc:decode_tc512(CorruptedEncode),
-    ?assertEqual(lists:sublist(Decoded, NumBytes), Data).
+    <<_:1/binary, Rest/binary>> = Encoded,
+
+    Corrupted = <<"x", Rest/binary>>,
+
+    {ok, <<Original:NumBytes/binary, _/binary>>} = erldpc:decode_tc512(Corrupted),
+
+    ?assertEqual(Original, Data).
 
 encode_decode_tm1280_test() ->
     NumBytes = 128,
-    Data = lists:seq(0, NumBytes - 1),
+    Data = crypto:strong_rand_bytes(NumBytes),
     {ok, Encoded} = erldpc:encode_tm1280(Data),
-    [_First, _Second, _Third | Rest] = Encoded,
-    CorruptedEncode = [10, 20, 30 | Rest],
 
-    {ok, Decoded} = erldpc:decode_tm1280(CorruptedEncode),
-    ?assertEqual(lists:sublist(Decoded, NumBytes), Data).
+    <<_:1/binary, Rest/binary>> = Encoded,
+
+    Corrupted = <<"x", Rest/binary>>,
+
+    {ok, <<Original:NumBytes/binary, _/binary>>} = erldpc:decode_tm1280(Corrupted),
+
+    ?assertEqual(Original, Data).
 
 encode_decode_tm1536_test() ->
     NumBytes = 128,
-    Data = lists:seq(0, NumBytes - 1),
+    Data = crypto:strong_rand_bytes(NumBytes),
     {ok, Encoded} = erldpc:encode_tm1536(Data),
-    [_First, _Second, _Third | Rest] = Encoded,
-    CorruptedEncode = [10, 20, 30 | Rest],
 
-    {ok, Decoded} = erldpc:decode_tm1536(CorruptedEncode),
-    ?assertEqual(lists:sublist(Decoded, NumBytes), Data).
+    <<_:1/binary, Rest/binary>> = Encoded,
+
+    Corrupted = <<"x", Rest/binary>>,
+
+    {ok, <<Original:NumBytes/binary, _/binary>>} = erldpc:decode_tm1536(Corrupted),
+
+    ?assertEqual(Original, Data).
 
 encode_decode_tm2048_test() ->
     NumBytes = 128,
-    Data = lists:seq(0, NumBytes - 1),
+    Data = crypto:strong_rand_bytes(NumBytes),
     {ok, Encoded} = erldpc:encode_tm2048(Data),
-    [_First, _Second, _Third | Rest] = Encoded,
-    CorruptedEncode = [10, 20, 30 | Rest],
 
-    {ok, Decoded} = erldpc:decode_tm2048(CorruptedEncode),
-    ?assertEqual(lists:sublist(Decoded, NumBytes), Data).
+    <<_:1/binary, Rest/binary>> = Encoded,
+
+    Corrupted = <<"x", Rest/binary>>,
+
+    {ok, <<Original:NumBytes/binary, _/binary>>} = erldpc:decode_tm2048(Corrupted),
+
+    ?assertEqual(Original, Data).
 
 %% XXX: These aren't working cuz they don't seem to conform to the standard decode afaict
 %% encode_decode_tm5120_test() ->
