@@ -3,10 +3,16 @@
 REBAR=./rebar3
 
 compile:
-	$(REBAR) as prod compile
+	$(REBAR) compile
 
 clean:
 	$(REBAR) clean
 
-test:
-	$(REBAR) as test do eunit
+test:compile
+	$(REBAR) as test do eunit && $(REBAR) as test ct --verbose
+
+typecheck:
+	$(REBAR) dialyzer
+
+ci:compile
+	$(REBAR) dialyzer && $(REBAR) as test do eunit && $(REBAR) as test ct --verbose
