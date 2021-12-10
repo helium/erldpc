@@ -92,7 +92,7 @@ decode_tm8192(_Data, _Iterations) ->
     not_loaded(?LINE).
 
 load() ->
-    erlang:load_nif(filename:join(priv(), "liberldpc"), none).
+    erlang:load_nif(filename:join(priv(), "libnative"), none).
 
 not_loaded(Line) ->
     erlang:nif_error({error, {not_loaded, [{module, ?MODULE}, {line, Line}]}}).
