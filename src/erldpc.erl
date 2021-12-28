@@ -3,23 +3,23 @@
 %% API
 -export([
          encode_tc128/1,
-         decode_tc128/1,
+         decode_tc128/1, decode_tc128/2,
          encode_tc256/1,
-         decode_tc256/1,
+         decode_tc256/1, decode_tc256/2,
          encode_tc512/1,
-         decode_tc512/1,
+         decode_tc512/1, decode_tc512/2,
          encode_tm1280/1,
-         decode_tm1280/1,
+         decode_tm1280/1, decode_tm1280/2,
          encode_tm1536/1,
-         decode_tm1536/1,
+         decode_tm1536/1, decode_tm1536/2,
          encode_tm2048/1,
-         decode_tm2048/1,
+         decode_tm2048/1, decode_tm2048/2,
          encode_tm5120/1,
-         decode_tm5120/1,
+         decode_tm5120/1, decode_tm5120/2,
          encode_tm6144/1,
-         decode_tm6144/1,
+         decode_tm6144/1, decode_tm6144/2,
          encode_tm8192/1,
-         decode_tm8192/1
+         decode_tm8192/1, decode_tm8192/2
         ]).
 
 %% Native lib support
