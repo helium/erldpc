@@ -17,12 +17,30 @@ fn encode_tc128<'a>(env: Env<'a>, txdata: Bin) -> NifResult<Term<'a>> {
     Ok((ok(), Bin(txcode)).encode(env))
 }
 
-#[rustler::nif(name = "decode_tc128")]
-fn decode_tc128<'a>(env: Env<'a>, rxcode: Bin, iterations: u8) -> NifResult<Term<'a>> {
+#[rustler::nif(name = "decode_bf_tc128")]
+fn decode_bf_tc128<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
     let code = LDPCCode::TC128;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations as usize);
+    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
+    Ok((ok(), Bin(rxdata)).encode(env))
+}
+
+#[rustler::nif(name = "decode_ms_tc128")]
+fn decode_ms_tc128<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+    let code = LDPCCode::TC128;
+    let mut working = vec![0i8; code.decode_ms_working_len()];
+    let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
+    let mut rxdata = vec![0u8; code.output_len()];
+    let mut llrs = vec![0i8; 128];
+    code.hard_to_llrs(&rxcode.0, &mut llrs);
+    code.decode_ms(
+        &llrs,
+        &mut rxdata,
+        &mut working,
+        &mut working_u8,
+        iterations,
+    );
     Ok((ok(), Bin(rxdata)).encode(env))
 }
 
@@ -35,12 +53,30 @@ fn encode_tc256<'a>(env: Env<'a>, txdata: Bin) -> NifResult<Term<'a>> {
     Ok((ok(), Bin(txcode)).encode(env))
 }
 
-#[rustler::nif(name = "decode_tc256")]
-fn decode_tc256<'a>(env: Env<'a>, rxcode: Bin, iterations: u8) -> NifResult<Term<'a>> {
+#[rustler::nif(name = "decode_ms_tc256")]
+fn decode_ms_tc256<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+    let code = LDPCCode::TC256;
+    let mut working = vec![0i8; code.decode_ms_working_len()];
+    let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
+    let mut rxdata = vec![0u8; code.output_len()];
+    let mut llrs = vec![0i8; 256];
+    code.hard_to_llrs(&rxcode.0, &mut llrs);
+    code.decode_ms(
+        &llrs,
+        &mut rxdata,
+        &mut working,
+        &mut working_u8,
+        iterations,
+    );
+    Ok((ok(), Bin(rxdata)).encode(env))
+}
+
+#[rustler::nif(name = "decode_bf_tc256")]
+fn decode_bf_tc256<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
     let code = LDPCCode::TC256;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations as usize);
+    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
     Ok((ok(), Bin(rxdata)).encode(env))
 }
 
@@ -54,12 +90,30 @@ fn encode_tc512<'a>(env: Env<'a>, data: Bin) -> NifResult<Term<'a>> {
     Ok((ok(), Bin(codeword)).encode(env))
 }
 
-#[rustler::nif(name = "decode_tc512")]
-fn decode_tc512<'a>(env: Env<'a>, rxcode: Bin, iterations: u8) -> NifResult<Term<'a>> {
+#[rustler::nif(name = "decode_bf_tc512")]
+fn decode_bf_tc512<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
     let code = LDPCCode::TC512;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations as usize);
+    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
+    Ok((ok(), Bin(rxdata)).encode(env))
+}
+
+#[rustler::nif(name = "decode_ms_tc512")]
+fn decode_ms_tc512<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+    let code = LDPCCode::TC512;
+    let mut working = vec![0i8; code.decode_ms_working_len()];
+    let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
+    let mut rxdata = vec![0u8; code.output_len()];
+    let mut llrs = vec![0i8; 512];
+    code.hard_to_llrs(&rxcode.0, &mut llrs);
+    code.decode_ms(
+        &llrs,
+        &mut rxdata,
+        &mut working,
+        &mut working_u8,
+        iterations,
+    );
     Ok((ok(), Bin(rxdata)).encode(env))
 }
 
@@ -72,12 +126,30 @@ fn encode_tm1280<'a>(env: Env<'a>, data: Bin) -> NifResult<Term<'a>> {
     Ok((ok(), Bin(codeword)).encode(env))
 }
 
-#[rustler::nif(name = "decode_tm1280")]
-fn decode_tm1280<'a>(env: Env<'a>, rxcode: Bin, iterations: u8) -> NifResult<Term<'a>> {
+#[rustler::nif(name = "decode_bf_tm1280")]
+fn decode_bf_tm1280<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
     let code = LDPCCode::TM1280;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations as usize);
+    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
+    Ok((ok(), Bin(rxdata)).encode(env))
+}
+
+#[rustler::nif(name = "decode_ms_tm1280")]
+fn decode_ms_tm1280<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+    let code = LDPCCode::TM1280;
+    let mut working = vec![0i8; code.decode_ms_working_len()];
+    let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
+    let mut rxdata = vec![0u8; code.output_len()];
+    let mut llrs = vec![0i8; 1280];
+    code.hard_to_llrs(&rxcode.0, &mut llrs);
+    code.decode_ms(
+        &llrs,
+        &mut rxdata,
+        &mut working,
+        &mut working_u8,
+        iterations,
+    );
     Ok((ok(), Bin(rxdata)).encode(env))
 }
 
@@ -90,12 +162,30 @@ fn encode_tm1536<'a>(env: Env<'a>, data: Bin) -> NifResult<Term<'a>> {
     Ok((ok(), Bin(codeword)).encode(env))
 }
 
-#[rustler::nif(name = "decode_tm1536")]
-fn decode_tm1536<'a>(env: Env<'a>, rxcode: Bin, iterations: u8) -> NifResult<Term<'a>> {
+#[rustler::nif(name = "decode_bf_tm1536")]
+fn decode_bf_tm1536<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
     let code = LDPCCode::TM1536;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations as usize);
+    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
+    Ok((ok(), Bin(rxdata)).encode(env))
+}
+
+#[rustler::nif(name = "decode_ms_tm1536")]
+fn decode_ms_tm1536<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+    let code = LDPCCode::TM1536;
+    let mut working = vec![0i8; code.decode_ms_working_len()];
+    let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
+    let mut rxdata = vec![0u8; code.output_len()];
+    let mut llrs = vec![0i8; 1536];
+    code.hard_to_llrs(&rxcode.0, &mut llrs);
+    code.decode_ms(
+        &llrs,
+        &mut rxdata,
+        &mut working,
+        &mut working_u8,
+        iterations,
+    );
     Ok((ok(), Bin(rxdata)).encode(env))
 }
 
@@ -108,12 +198,30 @@ fn encode_tm2048<'a>(env: Env<'a>, data: Bin) -> NifResult<Term<'a>> {
     Ok((ok(), Bin(codeword)).encode(env))
 }
 
-#[rustler::nif(name = "decode_tm2048")]
-fn decode_tm2048<'a>(env: Env<'a>, rxcode: Bin, iterations: u8) -> NifResult<Term<'a>> {
+#[rustler::nif(name = "decode_bf_tm2048")]
+fn decode_bf_tm2048<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
     let code = LDPCCode::TM2048;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations as usize);
+    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
+    Ok((ok(), Bin(rxdata)).encode(env))
+}
+
+#[rustler::nif(name = "decode_ms_tm2048")]
+fn decode_ms_tm2048<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+    let code = LDPCCode::TM2048;
+    let mut working = vec![0i8; code.decode_ms_working_len()];
+    let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
+    let mut rxdata = vec![0u8; code.output_len()];
+    let mut llrs = vec![0i8; 2048];
+    code.hard_to_llrs(&rxcode.0, &mut llrs);
+    code.decode_ms(
+        &llrs,
+        &mut rxdata,
+        &mut working,
+        &mut working_u8,
+        iterations,
+    );
     Ok((ok(), Bin(rxdata)).encode(env))
 }
 
@@ -126,12 +234,30 @@ fn encode_tm5120<'a>(env: Env<'a>, data: Bin) -> NifResult<Term<'a>> {
     Ok((ok(), Bin(codeword)).encode(env))
 }
 
-#[rustler::nif(name = "decode_tm5120")]
-fn decode_tm5120<'a>(env: Env<'a>, rxcode: Bin, iterations: u8) -> NifResult<Term<'a>> {
+#[rustler::nif(name = "decode_bf_tm5120")]
+fn decode_bf_tm5120<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
     let code = LDPCCode::TM5120;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations as usize);
+    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
+    Ok((ok(), Bin(rxdata)).encode(env))
+}
+
+#[rustler::nif(name = "decode_ms_tm5120")]
+fn decode_ms_tm5120<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+    let code = LDPCCode::TM5120;
+    let mut working = vec![0i8; code.decode_ms_working_len()];
+    let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
+    let mut rxdata = vec![0u8; code.output_len()];
+    let mut llrs = vec![0i8; 5120];
+    code.hard_to_llrs(&rxcode.0, &mut llrs);
+    code.decode_ms(
+        &llrs,
+        &mut rxdata,
+        &mut working,
+        &mut working_u8,
+        iterations,
+    );
     Ok((ok(), Bin(rxdata)).encode(env))
 }
 
@@ -144,12 +270,30 @@ fn encode_tm6144<'a>(env: Env<'a>, data: Bin) -> NifResult<Term<'a>> {
     Ok((ok(), Bin(codeword)).encode(env))
 }
 
-#[rustler::nif(name = "decode_tm6144")]
-fn decode_tm6144<'a>(env: Env<'a>, rxcode: Bin, iterations: u8) -> NifResult<Term<'a>> {
+#[rustler::nif(name = "decode_bf_tm6144")]
+fn decode_bf_tm6144<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
     let code = LDPCCode::TM6144;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations as usize);
+    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
+    Ok((ok(), Bin(rxdata)).encode(env))
+}
+
+#[rustler::nif(name = "decode_ms_tm6144")]
+fn decode_ms_tm6144<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+    let code = LDPCCode::TM6144;
+    let mut working = vec![0i8; code.decode_ms_working_len()];
+    let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
+    let mut rxdata = vec![0u8; code.output_len()];
+    let mut llrs = vec![0i8; 6144];
+    code.hard_to_llrs(&rxcode.0, &mut llrs);
+    code.decode_ms(
+        &llrs,
+        &mut rxdata,
+        &mut working,
+        &mut working_u8,
+        iterations,
+    );
     Ok((ok(), Bin(rxdata)).encode(env))
 }
 
@@ -162,12 +306,30 @@ fn encode_tm8192<'a>(env: Env<'a>, data: Bin) -> NifResult<Term<'a>> {
     Ok((ok(), Bin(codeword)).encode(env))
 }
 
-#[rustler::nif(name = "decode_tm8192")]
-fn decode_tm8192<'a>(env: Env<'a>, rxcode: Bin, iterations: u8) -> NifResult<Term<'a>> {
+#[rustler::nif(name = "decode_bf_tm8192")]
+fn decode_bf_tm8192<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
     let code = LDPCCode::TM8192;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations as usize);
+    code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
+    Ok((ok(), Bin(rxdata)).encode(env))
+}
+
+#[rustler::nif(name = "decode_ms_tm8192")]
+fn decode_ms_tm8192<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+    let code = LDPCCode::TM8192;
+    let mut working = vec![0i8; code.decode_ms_working_len()];
+    let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
+    let mut rxdata = vec![0u8; code.output_len()];
+    let mut llrs = vec![0i8; 8192];
+    code.hard_to_llrs(&rxcode.0, &mut llrs);
+    code.decode_ms(
+        &llrs,
+        &mut rxdata,
+        &mut working,
+        &mut working_u8,
+        iterations,
+    );
     Ok((ok(), Bin(rxdata)).encode(env))
 }
 
@@ -175,23 +337,32 @@ rustler::init!(
     "erldpc",
     [
         encode_tc128,
-        decode_tc128,
+        decode_bf_tc128,
+        decode_ms_tc128,
         encode_tc256,
-        decode_tc256,
+        decode_bf_tc256,
+        decode_ms_tc256,
         encode_tc512,
-        decode_tc512,
+        decode_bf_tc512,
+        decode_ms_tc512,
         encode_tm1280,
-        decode_tm1280,
+        decode_bf_tm1280,
+        decode_ms_tm1280,
         encode_tm1536,
-        decode_tm1536,
+        decode_bf_tm1536,
+        decode_ms_tm1536,
         encode_tm2048,
-        decode_tm2048,
+        decode_bf_tm2048,
+        decode_ms_tm2048,
         encode_tm5120,
-        decode_tm5120,
+        decode_bf_tm5120,
+        decode_ms_tm5120,
         encode_tm6144,
-        decode_tm6144,
+        decode_bf_tm6144,
+        decode_ms_tm6144,
         encode_tm8192,
-        decode_tm8192,
+        decode_bf_tm8192,
+        decode_ms_tm8192,
     ],
     load = load
 );
