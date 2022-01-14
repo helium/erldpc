@@ -3,7 +3,6 @@ use labrador_ldpc::LDPCCode;
 use rustler::{Encoder, Env, NifResult, Term};
 
 mod bin;
-mod res;
 
 rustler::atoms! {
     ok,
@@ -50,7 +49,6 @@ fn decode_ms_tc128<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResul
 #[rustler::nif(name = "decode_ms_soft_tc128")]
 fn decode_ms_soft_tc128<'a>(
     env: Env<'a>,
-    rxcode: Bin,
     in_llrs: Vec<i8>,
     iterations: usize,
 ) -> NifResult<Term<'a>> {
@@ -58,11 +56,8 @@ fn decode_ms_soft_tc128<'a>(
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    let llrs = res::I8VecRes::from(in_llrs);
-    let mut llrs = llrs.write();
-    code.hard_to_llrs(&rxcode.0, &mut llrs);
     code.decode_ms(
-        &llrs,
+        &in_llrs,
         &mut rxdata,
         &mut working,
         &mut working_u8,
@@ -103,7 +98,6 @@ fn decode_ms_tc256<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResul
 #[rustler::nif(name = "decode_ms_soft_tc256")]
 fn decode_ms_soft_tc256<'a>(
     env: Env<'a>,
-    rxcode: Bin,
     in_llrs: Vec<i8>,
     iterations: usize,
 ) -> NifResult<Term<'a>> {
@@ -111,11 +105,8 @@ fn decode_ms_soft_tc256<'a>(
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    let llrs = res::I8VecRes::from(in_llrs);
-    let mut llrs = llrs.write();
-    code.hard_to_llrs(&rxcode.0, &mut llrs);
     code.decode_ms(
-        &llrs,
+        &in_llrs,
         &mut rxdata,
         &mut working,
         &mut working_u8,
@@ -177,7 +168,6 @@ fn decode_ms_tc512<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResul
 #[rustler::nif(name = "decode_ms_soft_tc512")]
 fn decode_ms_soft_tc512<'a>(
     env: Env<'a>,
-    rxcode: Bin,
     in_llrs: Vec<i8>,
     iterations: usize,
 ) -> NifResult<Term<'a>> {
@@ -185,11 +175,8 @@ fn decode_ms_soft_tc512<'a>(
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    let llrs = res::I8VecRes::from(in_llrs);
-    let mut llrs = llrs.write();
-    code.hard_to_llrs(&rxcode.0, &mut llrs);
     code.decode_ms(
-        &llrs,
+        &in_llrs,
         &mut rxdata,
         &mut working,
         &mut working_u8,
@@ -240,7 +227,6 @@ fn decode_ms_tm1280<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResu
 #[rustler::nif(name = "decode_ms_soft_tm1280")]
 fn decode_ms_soft_tm1280<'a>(
     env: Env<'a>,
-    rxcode: Bin,
     in_llrs: Vec<i8>,
     iterations: usize,
 ) -> NifResult<Term<'a>> {
@@ -248,11 +234,8 @@ fn decode_ms_soft_tm1280<'a>(
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    let llrs = res::I8VecRes::from(in_llrs);
-    let mut llrs = llrs.write();
-    code.hard_to_llrs(&rxcode.0, &mut llrs);
     code.decode_ms(
-        &llrs,
+        &in_llrs,
         &mut rxdata,
         &mut working,
         &mut working_u8,
@@ -303,7 +286,6 @@ fn decode_ms_tm1536<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResu
 #[rustler::nif(name = "decode_ms_soft_tm1536")]
 fn decode_ms_soft_tm1536<'a>(
     env: Env<'a>,
-    rxcode: Bin,
     in_llrs: Vec<i8>,
     iterations: usize,
 ) -> NifResult<Term<'a>> {
@@ -311,11 +293,8 @@ fn decode_ms_soft_tm1536<'a>(
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    let llrs = res::I8VecRes::from(in_llrs);
-    let mut llrs = llrs.write();
-    code.hard_to_llrs(&rxcode.0, &mut llrs);
     code.decode_ms(
-        &llrs,
+        &in_llrs,
         &mut rxdata,
         &mut working,
         &mut working_u8,
@@ -366,7 +345,6 @@ fn decode_ms_tm2048<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResu
 #[rustler::nif(name = "decode_ms_soft_tm2048")]
 fn decode_ms_soft_tm2048<'a>(
     env: Env<'a>,
-    rxcode: Bin,
     in_llrs: Vec<i8>,
     iterations: usize,
 ) -> NifResult<Term<'a>> {
@@ -374,11 +352,8 @@ fn decode_ms_soft_tm2048<'a>(
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    let llrs = res::I8VecRes::from(in_llrs);
-    let mut llrs = llrs.write();
-    code.hard_to_llrs(&rxcode.0, &mut llrs);
     code.decode_ms(
-        &llrs,
+        &in_llrs,
         &mut rxdata,
         &mut working,
         &mut working_u8,
@@ -429,7 +404,6 @@ fn decode_ms_tm5120<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResu
 #[rustler::nif(name = "decode_ms_soft_tm5120")]
 fn decode_ms_soft_tm5120<'a>(
     env: Env<'a>,
-    rxcode: Bin,
     in_llrs: Vec<i8>,
     iterations: usize,
 ) -> NifResult<Term<'a>> {
@@ -437,11 +411,8 @@ fn decode_ms_soft_tm5120<'a>(
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    let llrs = res::I8VecRes::from(in_llrs);
-    let mut llrs = llrs.write();
-    code.hard_to_llrs(&rxcode.0, &mut llrs);
     code.decode_ms(
-        &llrs,
+        &in_llrs,
         &mut rxdata,
         &mut working,
         &mut working_u8,
@@ -492,7 +463,6 @@ fn decode_ms_tm6144<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResu
 #[rustler::nif(name = "decode_ms_soft_tm6144")]
 fn decode_ms_soft_tm6144<'a>(
     env: Env<'a>,
-    rxcode: Bin,
     in_llrs: Vec<i8>,
     iterations: usize,
 ) -> NifResult<Term<'a>> {
@@ -500,11 +470,8 @@ fn decode_ms_soft_tm6144<'a>(
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    let llrs = res::I8VecRes::from(in_llrs);
-    let mut llrs = llrs.write();
-    code.hard_to_llrs(&rxcode.0, &mut llrs);
     code.decode_ms(
-        &llrs,
+        &in_llrs,
         &mut rxdata,
         &mut working,
         &mut working_u8,
@@ -555,7 +522,6 @@ fn decode_ms_tm8192<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResu
 #[rustler::nif(name = "decode_ms_soft_tm8192")]
 fn decode_ms_soft_tm8192<'a>(
     env: Env<'a>,
-    rxcode: Bin,
     in_llrs: Vec<i8>,
     iterations: usize,
 ) -> NifResult<Term<'a>> {
@@ -563,11 +529,8 @@ fn decode_ms_soft_tm8192<'a>(
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
     let mut rxdata = vec![0u8; code.output_len()];
-    let llrs = res::I8VecRes::from(in_llrs);
-    let mut llrs = llrs.write();
-    code.hard_to_llrs(&rxcode.0, &mut llrs);
     code.decode_ms(
-        &llrs,
+        &in_llrs,
         &mut rxdata,
         &mut working,
         &mut working_u8,
@@ -620,8 +583,7 @@ rustler::init!(
     load = load
 );
 
-fn load(env: Env, _: Term) -> bool {
-    rustler::resource!(res::I8VecRes, env);
+fn load(_env: Env, _: Term) -> bool {
     true
 }
 
