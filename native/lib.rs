@@ -1,6 +1,6 @@
 use crate::bin::Bin;
 use labrador_ldpc::LDPCCode;
-use rustler::{Encoder, Env, NifResult, Term};
+use rustler::{Env, NifResult, Term};
 
 mod bin;
 
@@ -8,27 +8,28 @@ rustler::atoms! {
     ok,
 }
 
-// TC128 scheme encode/decode
+type LocalResult = NifResult<(rustler::Atom, Bin)>;
+
 #[rustler::nif(name = "encode_tc128")]
-fn encode_tc128<'a>(env: Env<'a>, txdata: Bin) -> NifResult<Term<'a>> {
+fn encode_tc128(txdata: Bin) -> LocalResult {
     let code = LDPCCode::TC128;
     let mut txcode = vec![0u8; code.n() / 8];
     code.copy_encode(&txdata.0, &mut txcode);
-    Ok((ok(), Bin(txcode)).encode(env))
+    Ok((ok(), Bin(txcode)))
 }
 
 #[rustler::nif(name = "decode_bf_tc128")]
-fn decode_bf_tc128<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_bf_tc128(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TC128;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
     let out = &rxdata[..8];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_ms_tc128")]
-fn decode_ms_tc128<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_ms_tc128(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TC128;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -43,15 +44,11 @@ fn decode_ms_tc128<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResul
         iterations,
     );
     let out = &rxdata[..8];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_ms_soft_tc128")]
-fn decode_ms_soft_tc128<'a>(
-    env: Env<'a>,
-    in_llrs: Vec<i8>,
-    iterations: usize,
-) -> NifResult<Term<'a>> {
+fn decode_ms_soft_tc128(in_llrs: Vec<i8>, iterations: usize) -> LocalResult {
     let code = LDPCCode::TC128;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -64,20 +61,19 @@ fn decode_ms_soft_tc128<'a>(
         iterations,
     );
     let out = &rxdata[..8];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
-// TC256 scheme encode/decode
 #[rustler::nif(name = "encode_tc256")]
-fn encode_tc256<'a>(env: Env<'a>, txdata: Bin) -> NifResult<Term<'a>> {
+fn encode_tc256(txdata: Bin) -> LocalResult {
     let code = LDPCCode::TC256;
     let mut txcode = vec![0u8; code.n() / 8];
     code.copy_encode(&txdata.0, &mut txcode);
-    Ok((ok(), Bin(txcode)).encode(env))
+    Ok((ok(), Bin(txcode)))
 }
 
 #[rustler::nif(name = "decode_ms_tc256")]
-fn decode_ms_tc256<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_ms_tc256(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TC256;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -92,15 +88,11 @@ fn decode_ms_tc256<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResul
         iterations,
     );
     let out = &rxdata[..16];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_ms_soft_tc256")]
-fn decode_ms_soft_tc256<'a>(
-    env: Env<'a>,
-    in_llrs: Vec<i8>,
-    iterations: usize,
-) -> NifResult<Term<'a>> {
+fn decode_ms_soft_tc256(in_llrs: Vec<i8>, iterations: usize) -> LocalResult {
     let code = LDPCCode::TC256;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -113,41 +105,40 @@ fn decode_ms_soft_tc256<'a>(
         iterations,
     );
     let out = &rxdata[..16];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_bf_tc256")]
-fn decode_bf_tc256<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_bf_tc256(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TC256;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
     let out = &rxdata[..16];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
-// TC512 scheme encode/decode
 #[rustler::nif(name = "encode_tc512")]
-fn encode_tc512<'a>(env: Env<'a>, data: Bin) -> NifResult<Term<'a>> {
+fn encode_tc512(data: Bin) -> LocalResult {
     let code = LDPCCode::TC512;
     // Allocate memory for the encoded data
     let mut codeword = vec![0u8; code.n() / 8];
     code.copy_encode(&data.0, &mut codeword);
-    Ok((ok(), Bin(codeword)).encode(env))
+    Ok((ok(), Bin(codeword)))
 }
 
 #[rustler::nif(name = "decode_bf_tc512")]
-fn decode_bf_tc512<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_bf_tc512(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TC512;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
     let out = &rxdata[..32];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_ms_tc512")]
-fn decode_ms_tc512<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_ms_tc512(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TC512;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -162,15 +153,11 @@ fn decode_ms_tc512<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResul
         iterations,
     );
     let out = &rxdata[..32];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_ms_soft_tc512")]
-fn decode_ms_soft_tc512<'a>(
-    env: Env<'a>,
-    in_llrs: Vec<i8>,
-    iterations: usize,
-) -> NifResult<Term<'a>> {
+fn decode_ms_soft_tc512(in_llrs: Vec<i8>, iterations: usize) -> LocalResult {
     let code = LDPCCode::TC512;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -183,30 +170,29 @@ fn decode_ms_soft_tc512<'a>(
         iterations,
     );
     let out = &rxdata[..32];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
-// TM1280 scheme encode/decode
 #[rustler::nif(name = "encode_tm1280")]
-fn encode_tm1280<'a>(env: Env<'a>, data: Bin) -> NifResult<Term<'a>> {
+fn encode_tm1280(data: Bin) -> LocalResult {
     let code = LDPCCode::TM1280;
     let mut codeword = vec![0u8; code.n() / 8];
     code.copy_encode(&data.0, &mut codeword);
-    Ok((ok(), Bin(codeword)).encode(env))
+    Ok((ok(), Bin(codeword)))
 }
 
 #[rustler::nif(name = "decode_bf_tm1280")]
-fn decode_bf_tm1280<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_bf_tm1280(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM1280;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
     let out = &rxdata[..128];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_ms_tm1280")]
-fn decode_ms_tm1280<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_ms_tm1280(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM1280;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -221,15 +207,11 @@ fn decode_ms_tm1280<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResu
         iterations,
     );
     let out = &rxdata[..128];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_ms_soft_tm1280")]
-fn decode_ms_soft_tm1280<'a>(
-    env: Env<'a>,
-    in_llrs: Vec<i8>,
-    iterations: usize,
-) -> NifResult<Term<'a>> {
+fn decode_ms_soft_tm1280(in_llrs: Vec<i8>, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM1280;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -242,30 +224,29 @@ fn decode_ms_soft_tm1280<'a>(
         iterations,
     );
     let out = &rxdata[..128];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
-// TM1536 scheme encode/decode
 #[rustler::nif(name = "encode_tm1536")]
-fn encode_tm1536<'a>(env: Env<'a>, data: Bin) -> NifResult<Term<'a>> {
+fn encode_tm1536(data: Bin) -> LocalResult {
     let code = LDPCCode::TM1536;
     let mut codeword = vec![0u8; code.n() / 8];
     code.copy_encode(&data.0, &mut codeword);
-    Ok((ok(), Bin(codeword)).encode(env))
+    Ok((ok(), Bin(codeword)))
 }
 
 #[rustler::nif(name = "decode_bf_tm1536")]
-fn decode_bf_tm1536<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_bf_tm1536(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM1536;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
     let out = &rxdata[..128];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_ms_tm1536")]
-fn decode_ms_tm1536<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_ms_tm1536(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM1536;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -280,15 +261,11 @@ fn decode_ms_tm1536<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResu
         iterations,
     );
     let out = &rxdata[..128];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_ms_soft_tm1536")]
-fn decode_ms_soft_tm1536<'a>(
-    env: Env<'a>,
-    in_llrs: Vec<i8>,
-    iterations: usize,
-) -> NifResult<Term<'a>> {
+fn decode_ms_soft_tm1536(in_llrs: Vec<i8>, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM1536;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -301,30 +278,29 @@ fn decode_ms_soft_tm1536<'a>(
         iterations,
     );
     let out = &rxdata[..128];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
-// TM2048 scheme encode/decode
 #[rustler::nif(name = "encode_tm2048")]
-fn encode_tm2048<'a>(env: Env<'a>, data: Bin) -> NifResult<Term<'a>> {
+fn encode_tm2048(data: Bin) -> LocalResult {
     let code = LDPCCode::TM2048;
     let mut codeword = vec![0u8; code.n() / 8];
     code.copy_encode(&data.0, &mut codeword);
-    Ok((ok(), Bin(codeword)).encode(env))
+    Ok((ok(), Bin(codeword)))
 }
 
 #[rustler::nif(name = "decode_bf_tm2048")]
-fn decode_bf_tm2048<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_bf_tm2048(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM2048;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
     let out = &rxdata[..128];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_ms_tm2048")]
-fn decode_ms_tm2048<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_ms_tm2048(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM2048;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -339,15 +315,11 @@ fn decode_ms_tm2048<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResu
         iterations,
     );
     let out = &rxdata[..128];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_ms_soft_tm2048")]
-fn decode_ms_soft_tm2048<'a>(
-    env: Env<'a>,
-    in_llrs: Vec<i8>,
-    iterations: usize,
-) -> NifResult<Term<'a>> {
+fn decode_ms_soft_tm2048(in_llrs: Vec<i8>, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM2048;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -360,30 +332,29 @@ fn decode_ms_soft_tm2048<'a>(
         iterations,
     );
     let out = &rxdata[..128];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
-// TM5120 scheme encode/decode
 #[rustler::nif(name = "encode_tm5120")]
-fn encode_tm5120<'a>(env: Env<'a>, data: Bin) -> NifResult<Term<'a>> {
+fn encode_tm5120(data: Bin) -> LocalResult {
     let code = LDPCCode::TM5120;
     let mut codeword = vec![0u8; code.n() / 8];
     code.copy_encode(&data.0, &mut codeword);
-    Ok((ok(), Bin(codeword)).encode(env))
+    Ok((ok(), Bin(codeword)))
 }
 
 #[rustler::nif(name = "decode_bf_tm5120")]
-fn decode_bf_tm5120<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_bf_tm5120(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM5120;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
     let out = &rxdata[..512];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_ms_tm5120")]
-fn decode_ms_tm5120<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_ms_tm5120(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM5120;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -398,15 +369,11 @@ fn decode_ms_tm5120<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResu
         iterations,
     );
     let out = &rxdata[..512];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_ms_soft_tm5120")]
-fn decode_ms_soft_tm5120<'a>(
-    env: Env<'a>,
-    in_llrs: Vec<i8>,
-    iterations: usize,
-) -> NifResult<Term<'a>> {
+fn decode_ms_soft_tm5120(in_llrs: Vec<i8>, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM5120;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -419,30 +386,29 @@ fn decode_ms_soft_tm5120<'a>(
         iterations,
     );
     let out = &rxdata[..512];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
-// TM6144 scheme encode/decode
 #[rustler::nif(name = "encode_tm6144")]
-fn encode_tm6144<'a>(env: Env<'a>, data: Bin) -> NifResult<Term<'a>> {
+fn encode_tm6144(data: Bin) -> LocalResult {
     let code = LDPCCode::TM6144;
     let mut codeword = vec![0u8; code.n() / 8];
     code.copy_encode(&data.0, &mut codeword);
-    Ok((ok(), Bin(codeword)).encode(env))
+    Ok((ok(), Bin(codeword)))
 }
 
 #[rustler::nif(name = "decode_bf_tm6144")]
-fn decode_bf_tm6144<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_bf_tm6144(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM6144;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
     let out = &rxdata[..512];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_ms_tm6144")]
-fn decode_ms_tm6144<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_ms_tm6144(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM6144;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -457,15 +423,11 @@ fn decode_ms_tm6144<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResu
         iterations,
     );
     let out = &rxdata[..512];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_ms_soft_tm6144")]
-fn decode_ms_soft_tm6144<'a>(
-    env: Env<'a>,
-    in_llrs: Vec<i8>,
-    iterations: usize,
-) -> NifResult<Term<'a>> {
+fn decode_ms_soft_tm6144(in_llrs: Vec<i8>, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM6144;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -478,30 +440,29 @@ fn decode_ms_soft_tm6144<'a>(
         iterations,
     );
     let out = &rxdata[..512];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
-// TM8192 scheme encode/decode
 #[rustler::nif(name = "encode_tm8192")]
-fn encode_tm8192<'a>(env: Env<'a>, data: Bin) -> NifResult<Term<'a>> {
+fn encode_tm8192(data: Bin) -> LocalResult {
     let code = LDPCCode::TM8192;
     let mut codeword = vec![0u8; code.n() / 8];
     code.copy_encode(&data.0, &mut codeword);
-    Ok((ok(), Bin(codeword)).encode(env))
+    Ok((ok(), Bin(codeword)))
 }
 
 #[rustler::nif(name = "decode_bf_tm8192")]
-fn decode_bf_tm8192<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_bf_tm8192(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM8192;
     let mut working = vec![0u8; code.decode_bf_working_len()];
     let mut rxdata = vec![0u8; code.output_len()];
     code.decode_bf(&rxcode.0, &mut rxdata, &mut working, iterations);
     let out = &rxdata[..512];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_ms_tm8192")]
-fn decode_ms_tm8192<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResult<Term<'a>> {
+fn decode_ms_tm8192(rxcode: Bin, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM8192;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -516,15 +477,11 @@ fn decode_ms_tm8192<'a>(env: Env<'a>, rxcode: Bin, iterations: usize) -> NifResu
         iterations,
     );
     let out = &rxdata[..512];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 #[rustler::nif(name = "decode_ms_soft_tm8192")]
-fn decode_ms_soft_tm8192<'a>(
-    env: Env<'a>,
-    in_llrs: Vec<i8>,
-    iterations: usize,
-) -> NifResult<Term<'a>> {
+fn decode_ms_soft_tm8192(in_llrs: Vec<i8>, iterations: usize) -> LocalResult {
     let code = LDPCCode::TM8192;
     let mut working = vec![0i8; code.decode_ms_working_len()];
     let mut working_u8 = vec![0u8; code.decode_ms_working_u8_len()];
@@ -537,7 +494,7 @@ fn decode_ms_soft_tm8192<'a>(
         iterations,
     );
     let out = &rxdata[..512];
-    Ok((ok(), Bin(out.to_vec())).encode(env))
+    Ok((ok(), Bin(out.to_vec())))
 }
 
 rustler::init!(
