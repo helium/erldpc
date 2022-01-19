@@ -538,8 +538,8 @@ rustler::init!(
         decode_ms_soft_tm8192,
     ],
     load = Some(load),
-    upgrade = upgrade,
-    unload = unload,
+    upgrade = Some(upgrade),
+    unload = Some(unload),
 );
 
 fn load(_env: Env, _: Term) -> bool {

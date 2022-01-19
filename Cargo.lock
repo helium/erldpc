@@ -80,7 +80,7 @@ checksum = "f497285884f3fcff424ffc933e56d7cbca511def0c9831a7f9b5f6153e3cc89b"
 [[package]]
 name = "rustler"
 version = "0.23.0"
-source = "git+https://github.com/vihu/rustler.git?branch=rg/unload-upgrade#84472a06f48c11162dc3a61f51e4b8bbe90b4bfb"
+source = "git+https://github.com/vihu/rustler.git?branch=rg/unload-upgrade#4ebfdf7047ee7ca9de416621758ba848808582ba"
 dependencies = [
  "lazy_static",
  "rustler_codegen",
@@ -90,7 +90,7 @@ dependencies = [
 [[package]]
 name = "rustler_codegen"
 version = "0.23.0"
-source = "git+https://github.com/vihu/rustler.git?branch=rg/unload-upgrade#84472a06f48c11162dc3a61f51e4b8bbe90b4bfb"
+source = "git+https://github.com/vihu/rustler.git?branch=rg/unload-upgrade#4ebfdf7047ee7ca9de416621758ba848808582ba"
 dependencies = [
  "heck",
  "proc-macro2",
@@ -101,7 +101,7 @@ dependencies = [
 [[package]]
 name = "rustler_sys"
 version = "2.1.1"
-source = "git+https://github.com/vihu/rustler.git?branch=rg/unload-upgrade#84472a06f48c11162dc3a61f51e4b8bbe90b4bfb"
+source = "git+https://github.com/vihu/rustler.git?branch=rg/unload-upgrade#4ebfdf7047ee7ca9de416621758ba848808582ba"
 dependencies = [
  "regex",
  "unreachable",
