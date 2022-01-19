@@ -7,26 +7,14 @@
 prop_check_tc128() ->
     ?FORALL(Bin, gen_bytes8(),
             begin
-                Data = binary_to_list(Bin),
-                DataLength = length(Data),
-                {ok, Encoded} = erldpc:encode_tc128(Data),
-                EncodedLength = length(Encoded),
+                {ok, Encoded} = erldpc:encode_tc128(Bin),
+                {ok, Decoded} = erldpc:decode_ms_tc128(flip(Encoded)),
 
-                [_First | Rest] = Encoded,
-                CorruptedEncode = [10 | Rest],
+                Check = Decoded == Bin,
 
-                {ok, Decoded} = erldpc:decode_tc128(CorruptedEncode),
-                DecodedLength = length(Decoded),
-
-                Check = (EncodedLength == 2*DataLength andalso
-                         DecodedLength == 2*DataLength andalso
-                         lists:sublist(Decoded, DataLength) == Data),
-
-               ?WHENFAIL(begin
+                ?WHENFAIL(begin
                               io:format("Bin: ~p~n", [Bin]),
-                              io:format("Data: ~p~n", [Data]),
                               io:format("Encoded: ~p~n", [Encoded]),
-                              io:format("CorruptedEncode: ~p~n", [CorruptedEncode]),
                               io:format("Decoded: ~p~n", [Decoded])
                           end,
                           conjunction([{verify_tc128, Check}]))
@@ -35,3 +23,11 @@ prop_check_tc128() ->
 
 gen_bytes8() ->
     binary(8).
+
+flip(Data) ->
+    << begin
+           case rand:uniform(100) < 1 of
+               true -> <<(B bxor 1):1/integer>>;
+               false -> <<B:1/integer>>
+           end
+       end || <<B:1/integer>> <= Data >>.

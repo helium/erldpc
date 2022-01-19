@@ -537,12 +537,20 @@ rustler::init!(
         decode_ms_tm8192,
         decode_ms_soft_tm8192,
     ],
-    load = load
+    load = Some(load),
+    upgrade = upgrade,
+    unload = unload,
 );
 
 fn load(_env: Env, _: Term) -> bool {
     true
 }
+
+fn upgrade(_env: rustler::Env, _: rustler::Term) -> bool {
+    true
+}
+
+fn unload(_env: rustler::Env) {}
 
 #[cfg(test)]
 mod tests {

@@ -14,4 +14,4 @@ path = "native/lib.rs"
 
 [dependencies]
 labrador-ldpc = { git = "https://github.com/adamgreig/labrador-ldpc", branch = "master" }
-rustler = { git = "https://github.com/rusterlium/rustler.git", branch = "master" }
+rustler = { git = "https://github.com/vihu/rustler.git", branch = "rg/unload-upgrade" }
