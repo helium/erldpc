@@ -13,12 +13,9 @@ dependencies = [
 
 [[package]]
 name = "heck"
-version = "0.3.3"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6d621efb26863f0e9924c6ac577e8275e5e6b77455db64ffa6c65c904e9e132c"
-dependencies = [
- "unicode-segmentation",
-]
+checksum = "2540771e65fc8cb83cd6e8a237f70c319bd5c29f78ed1084ba5d50eeac86f7f9"
 
 [[package]]
 name = "labrador-ldpc"
@@ -47,18 +44,18 @@ dependencies = [
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.33"
+version = "1.0.36"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fb37d2df5df740e582f28f8560cf425f52bb267d872fe58358eadb554909f07a"
+checksum = "c7342d5883fbccae1cc37a2353b09c87c9b0f3afd73f5fb9bba687a1f733b029"
 dependencies = [
  "unicode-xid",
 ]
 
 [[package]]
 name = "quote"
-version = "1.0.10"
+version = "1.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "38bc8cc6a5f2e3655e0899c1b848643b2562f853f114bfec7be120678e3ace05"
+checksum = "47aa80447ce4daf1717500037052af176af5d38cc3e571d9ec1c7353fc10c87d"
 dependencies = [
  "proc-macro2",
 ]
@@ -82,8 +79,8 @@ checksum = "f497285884f3fcff424ffc933e56d7cbca511def0c9831a7f9b5f6153e3cc89b"
 
 [[package]]
 name = "rustler"
-version = "0.22.2"
-source = "git+https://github.com/rusterlium/rustler.git?branch=master#f8f0ce0c1a0c96c8cd7a16660fd4b982c4631028"
+version = "0.23.0"
+source = "git+https://github.com/vihu/rustler.git?branch=rg/unload-upgrade#4ebfdf7047ee7ca9de416621758ba848808582ba"
 dependencies = [
  "lazy_static",
  "rustler_codegen",
@@ -92,8 +89,8 @@ dependencies = [
 
 [[package]]
 name = "rustler_codegen"
-version = "0.22.2"
-source = "git+https://github.com/rusterlium/rustler.git?branch=master#f8f0ce0c1a0c96c8cd7a16660fd4b982c4631028"
+version = "0.23.0"
+source = "git+https://github.com/vihu/rustler.git?branch=rg/unload-upgrade#4ebfdf7047ee7ca9de416621758ba848808582ba"
 dependencies = [
  "heck",
  "proc-macro2",
@@ -104,7 +101,7 @@ dependencies = [
 [[package]]
 name = "rustler_sys"
 version = "2.1.1"
-source = "git+https://github.com/rusterlium/rustler.git?branch=master#f8f0ce0c1a0c96c8cd7a16660fd4b982c4631028"
+source = "git+https://github.com/vihu/rustler.git?branch=rg/unload-upgrade#4ebfdf7047ee7ca9de416621758ba848808582ba"
 dependencies = [
  "regex",
  "unreachable",
@@ -112,20 +109,14 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "1.0.82"
+version = "1.0.85"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8daf5dd0bb60cbd4137b1b587d2fc0ae729bc07cf01cd70b36a1ed5ade3b9d59"
+checksum = "a684ac3dcd8913827e18cd09a68384ee66c1de24157e3c556c9ab16d85695fb7"
 dependencies = [
  "proc-macro2",
  "quote",
  "unicode-xid",
 ]
-
-[[package]]
-name = "unicode-segmentation"
-version = "1.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8895849a949e7845e06bd6dc1aa51731a103c42707010a5b591c0038fb73385b"
 
 [[package]]
 name = "unicode-xid"
